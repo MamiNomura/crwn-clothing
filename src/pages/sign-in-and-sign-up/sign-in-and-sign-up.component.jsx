@@ -9,4 +9,5 @@ const SignInAndSignUpPage = () => (
     <SignUp />
   </div>
 );
+
 export default SignInAndSignUpPage;
