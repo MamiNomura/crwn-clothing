@@ -11,9 +11,11 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import CheckoutPage from './pages/checkout/checkout.component';
 
 import Header from './components/header/header.component';
+
 import { auth, createUserProfileDocument } from './firebase/firebase.utils';
-import { setCurrentUser } from './redux/user/user.action';
-import { selectCurrentUser } from './redux/user/user.selector';
+
+import { setCurrentUser } from './redux/user/user.actions';
+import { selectCurrentUser } from './redux/user/user.selectors';
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
@@ -74,4 +76,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
