@@ -15,7 +15,7 @@ import { updateCollections } from '../../redux/shop/shop.actions';
 const CollectionsOverviewWithSpinner = WithSpinner(CollectionsOverview);
 const CollectionPageWithSpinner = WithSpinner(CollectionPage);
 
-class ShopPage extends React.Component {
+class ShopPageSubscription extends React.Component {
   state = {
     loading: true
   };
@@ -64,4 +64,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateCollections(collectionsMap))
 });
 
-export default connect(null, mapDispatchToProps)(ShopPage);
+export default connect(null, mapDispatchToProps)(ShopPageSubscription);
