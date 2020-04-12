@@ -10,7 +10,7 @@ const config = {
   storageBucket: 'crwn-db-4f0ee.appspot.com',
   messagingSenderId: '744047426057',
   appId: '1:744047426057:web:ae74bb1440785a2d28d6d8',
-  measurementId: 'G-1721TW63WP'
+  measurementId: 'G-1721TW63WP',
 };
 
 firebase.initializeApp(config);
@@ -30,7 +30,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
         displayName,
         email,
         createdAt,
-        ...additionalData
+        ...additionalData,
       });
     } catch (error) {
       console.log('error creating user', error.message);
@@ -42,7 +42,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
 export const getCurrentUser = () => {
   return new Promise((resolve, reject) => {
-    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
       unsubscribe();
       resolve(userAuth);
     }, reject);
@@ -64,22 +64,22 @@ export const addCollectionAndDocuments = async (
 
   const batch = firestore.batch();
 
-  objectsToAdd.forEach(obj => {
+  objectsToAdd.forEach((obj) => {
     const newDocRef = collectionRef.doc(); // create random id
     batch.set(newDocRef, obj);
   });
   return await batch.commit();
 };
 
-export const convertCollectionsSnapshotToMap = collections => {
-  const transformedCollection = collections.docs.map(doc => {
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const transformedCollection = collections.docs.map((doc) => {
     const { title, items } = doc.data();
 
     return {
       routeName: encodeURI(title.toLowerCase()),
       id: doc.id,
       title,
-      items
+      items,
     };
   });
   return transformedCollection.reduce((accumulator, collection) => {
@@ -87,4 +87,18 @@ export const convertCollectionsSnapshotToMap = collections => {
     return accumulator;
   }, {});
 };
+
+export const getUserCartRef = async (userId) => {
+  const cartsRef = firestore.collection('carts').where('userId', '==', userId);
+  const snapShot = await cartsRef.get();
+
+  if (snapShot.empty) {
+    const cartDocRef = firestore.collection('carts').doc();
+    await cartDocRef.set({ userId, cartItems: [] });
+    return cartDocRef;
+  } else {
+    return snapShot.docs[0].ref;
+  }
+};
+
 export default firebase;
